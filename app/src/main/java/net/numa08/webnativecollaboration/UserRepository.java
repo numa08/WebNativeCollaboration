@@ -37,7 +37,12 @@ public class UserRepository {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        final String javascript = "javascript:(" + callback + ")(null,'" + json + "');";
+                        final String javascript;
+                        if (callback.startsWith("function ")) {
+                            javascript = "javascript:(" + callback + ")(null,'" + json + "');";
+                        } else {
+                            javascript = "javascript:" + callback + "(null, '" + json + "');";
+                        }
                         Log.d("debug", "code " + javascript);
                         webView.evaluateJavascript(javascript, null);
                     }
